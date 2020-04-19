@@ -47,17 +47,20 @@ namespace ScreenCap
 
         private void main__form_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Delete temp files
             if(File.Exists(tmp_gif_path))
             {
                 File.Delete(tmp_gif_path);
             }
         }
 
+        // Set picture on main form
         public void setPic(Image inPic)
         {
             this.pic_preview.Image = inPic;
         }
 
+        // show/hide capture frame
         private void capture_area_change()
         {
             if(this.rad_capture_screen.Checked)
@@ -80,11 +83,13 @@ namespace ScreenCap
             capture_area_change();
         }
 
+        // take snapshot of screen
         private Bitmap take_snapshot_screen()
         {
             return this.take_snapshot(Screen.PrimaryScreen.Bounds.X, Screen.PrimaryScreen.Bounds.Y, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
         }
 
+        // take snapshot of area
         private Bitmap take_snapshot_area()
         {
             var org_opt = frm_select_area_instance.Opacity;
@@ -94,6 +99,7 @@ namespace ScreenCap
             return tmp_image;
         }
 
+        // snapshot function
         private Bitmap take_snapshot(int x, int y, int w, int h)
         {
             Size shot_size = new Size(w, h);
@@ -114,6 +120,7 @@ namespace ScreenCap
             return bmpScreenshot;
         }
 
+        // load an image file into picturebox without keeping a lock on the file
         private void load_external_image(String img_path)
         {
             PictureBox pic = this.pic_preview;
@@ -155,34 +162,46 @@ namespace ScreenCap
             int fps = Int32.Parse(this.txt_gif_fps.Text);
             int i = 0;
 
+            // total amount of pictures
+            int picture_count = seconds_to_record * fps;
+            // delay between each screenshot
             int mysleep = 1000 / fps;
+            // temp storage for screenshots
+            Image[] screenshots = new Image[picture_count];
 
+            // take screenshots
+            while (i < picture_count)
+            {
+                screenshots[i] = this.take_snapshot(x, y, w, h);
+                i++;
+                System.Threading.Thread.Sleep(mysleep);
+            }
+            
+            // generate the gif and store it as temp file
             using (GifCreator gifCreator = AnimatedGif.Create(this.tmp_gif_path, mysleep))
             {
-                while (i < seconds_to_record * fps)
+                foreach (Image screenshot in screenshots)
                 {
-                    System.Drawing.Image bmpScreenshot = this.take_snapshot(x, y, w, h);
-                    using (bmpScreenshot)
+                    using (screenshot)
                     {
-                        // Add the image to gifEncoder with default Quality
-                        gifCreator.AddFrame(bmpScreenshot);
+                        gifCreator.AddFrame(screenshot);
                     }
-
-                    i++;
-                    System.Threading.Thread.Sleep(mysleep);
                 }
-            } // gifCreator.Finish and gifCreator.Dispose is called here
+            }
 
-            this.load_external_image(this.tmp_gif_path);
-            //this.setPic(Image.FromFile(tmp_gif_path));
+            // load the gif temp file to picture box
+            this.load_external_image(this.tmp_gif_path);;
 
+            // reset form and set gif var
             if (rad_capture_area.Checked) { 
                 frm_select_area_instance.Show();
             }
+
             current_image_is_gif = true;
             rad_capture_screen.Checked = true;
         }
 
+        // copy taken pictures to clipboard (GIF not possible so far, it will only copy one frame)
         private void btn_copy_image_Click(object sender, EventArgs e)
         {
             if (pic_preview.Image == null)
@@ -202,6 +221,7 @@ namespace ScreenCap
             }
         }
 
+        // build save dialog
         private void btn_save_Click(object sender, EventArgs e)
         {
             if(pic_preview.Image == null)
@@ -222,14 +242,17 @@ namespace ScreenCap
             }
         }
 
+        // save pictures to disk
         private void saveDialog_image_FileOK(object sender, CancelEventArgs e)
         {
+            // copy gif temp file to location
             if (this.current_image_is_gif)
             {
                 File.Copy(tmp_gif_path, saveDialog_image.FileName);
             }
             else
             {
+                // save image in selected format to given location
                 ImageFormat new_img_format = null;
                 switch (saveDialog_image.FilterIndex)
                 {
