@@ -85,6 +85,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DelayedCaptureJob.cs" />
     <Compile Include="frm_select_area.cs">
       <SubType>Form</SubType>
     </Compile>

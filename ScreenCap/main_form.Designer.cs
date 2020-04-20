@@ -43,9 +43,15 @@
             this.btn_save = new System.Windows.Forms.Button();
             this.btn_copy_image = new System.Windows.Forms.Button();
             this.saveDialog_image = new System.Windows.Forms.SaveFileDialog();
+            this.grp_delayed = new System.Windows.Forms.GroupBox();
+            this.btn_delay_cancel = new System.Windows.Forms.Button();
+            this.txt_delay = new System.Windows.Forms.TextBox();
+            this.lab_delay = new System.Windows.Forms.Label();
+            this.chk_delayed_shot = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pic_preview)).BeginInit();
             this.grp_cap_area.SuspendLayout();
             this.grp_gif.SuspendLayout();
+            this.grp_delayed.SuspendLayout();
             this.SuspendLayout();
             // 
             // pic_preview
@@ -59,7 +65,7 @@
             // 
             // btn_screenshot
             // 
-            this.btn_screenshot.Location = new System.Drawing.Point(12, 396);
+            this.btn_screenshot.Location = new System.Drawing.Point(12, 446);
             this.btn_screenshot.Name = "btn_screenshot";
             this.btn_screenshot.Size = new System.Drawing.Size(188, 23);
             this.btn_screenshot.TabIndex = 1;
@@ -73,7 +79,7 @@
             this.grp_cap_area.Controls.Add(this.rad_capture_screen);
             this.grp_cap_area.Location = new System.Drawing.Point(12, 338);
             this.grp_cap_area.Name = "grp_cap_area";
-            this.grp_cap_area.Size = new System.Drawing.Size(188, 52);
+            this.grp_cap_area.Size = new System.Drawing.Size(271, 52);
             this.grp_cap_area.TabIndex = 3;
             this.grp_cap_area.TabStop = false;
             this.grp_cap_area.Text = "Capture-Area";
@@ -109,7 +115,7 @@
             this.grp_gif.Controls.Add(this.lab_gif_length_seconds);
             this.grp_gif.Controls.Add(this.txt_gif_length_seconds);
             this.grp_gif.Controls.Add(this.btn_gif_record);
-            this.grp_gif.Location = new System.Drawing.Point(206, 338);
+            this.grp_gif.Location = new System.Drawing.Point(206, 441);
             this.grp_gif.Name = "grp_gif";
             this.grp_gif.Size = new System.Drawing.Size(354, 81);
             this.grp_gif.TabIndex = 4;
@@ -162,7 +168,7 @@
             // 
             // btn_save
             // 
-            this.btn_save.Location = new System.Drawing.Point(12, 425);
+            this.btn_save.Location = new System.Drawing.Point(12, 533);
             this.btn_save.Name = "btn_save";
             this.btn_save.Size = new System.Drawing.Size(271, 23);
             this.btn_save.TabIndex = 5;
@@ -172,7 +178,7 @@
             // 
             // btn_copy_image
             // 
-            this.btn_copy_image.Location = new System.Drawing.Point(289, 425);
+            this.btn_copy_image.Location = new System.Drawing.Point(289, 533);
             this.btn_copy_image.Name = "btn_copy_image";
             this.btn_copy_image.Size = new System.Drawing.Size(271, 23);
             this.btn_copy_image.TabIndex = 6;
@@ -184,11 +190,63 @@
             // 
             this.saveDialog_image.FileOk += new System.ComponentModel.CancelEventHandler(this.saveDialog_image_FileOK);
             // 
+            // grp_delayed
+            // 
+            this.grp_delayed.Controls.Add(this.btn_delay_cancel);
+            this.grp_delayed.Controls.Add(this.txt_delay);
+            this.grp_delayed.Controls.Add(this.lab_delay);
+            this.grp_delayed.Controls.Add(this.chk_delayed_shot);
+            this.grp_delayed.Location = new System.Drawing.Point(289, 338);
+            this.grp_delayed.Name = "grp_delayed";
+            this.grp_delayed.Size = new System.Drawing.Size(271, 97);
+            this.grp_delayed.TabIndex = 7;
+            this.grp_delayed.TabStop = false;
+            this.grp_delayed.Text = "Delayed screenshot";
+            // 
+            // btn_delay_cancel
+            // 
+            this.btn_delay_cancel.Enabled = false;
+            this.btn_delay_cancel.Location = new System.Drawing.Point(9, 68);
+            this.btn_delay_cancel.Name = "btn_delay_cancel";
+            this.btn_delay_cancel.Size = new System.Drawing.Size(256, 23);
+            this.btn_delay_cancel.TabIndex = 3;
+            this.btn_delay_cancel.Text = "cancel";
+            this.btn_delay_cancel.UseVisualStyleBackColor = true;
+            this.btn_delay_cancel.Click += new System.EventHandler(this.btn_delay_cancel_Click);
+            // 
+            // txt_delay
+            // 
+            this.txt_delay.Location = new System.Drawing.Point(100, 43);
+            this.txt_delay.Name = "txt_delay";
+            this.txt_delay.Size = new System.Drawing.Size(165, 20);
+            this.txt_delay.TabIndex = 2;
+            this.txt_delay.Text = "5";
+            // 
+            // lab_delay
+            // 
+            this.lab_delay.AutoSize = true;
+            this.lab_delay.Location = new System.Drawing.Point(6, 46);
+            this.lab_delay.Name = "lab_delay";
+            this.lab_delay.Size = new System.Drawing.Size(88, 13);
+            this.lab_delay.TabIndex = 1;
+            this.lab_delay.Text = "Delay in seconds";
+            // 
+            // chk_delayed_shot
+            // 
+            this.chk_delayed_shot.AutoSize = true;
+            this.chk_delayed_shot.Location = new System.Drawing.Point(6, 20);
+            this.chk_delayed_shot.Name = "chk_delayed_shot";
+            this.chk_delayed_shot.Size = new System.Drawing.Size(153, 17);
+            this.chk_delayed_shot.TabIndex = 0;
+            this.chk_delayed_shot.Text = "enable delayed screenshot";
+            this.chk_delayed_shot.UseVisualStyleBackColor = true;
+            // 
             // main_form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(572, 463);
+            this.ClientSize = new System.Drawing.Size(572, 560);
+            this.Controls.Add(this.grp_delayed);
             this.Controls.Add(this.btn_copy_image);
             this.Controls.Add(this.btn_save);
             this.Controls.Add(this.grp_gif);
@@ -207,6 +265,8 @@
             this.grp_cap_area.PerformLayout();
             this.grp_gif.ResumeLayout(false);
             this.grp_gif.PerformLayout();
+            this.grp_delayed.ResumeLayout(false);
+            this.grp_delayed.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -227,6 +287,11 @@
         private System.Windows.Forms.Button btn_save;
         private System.Windows.Forms.Button btn_copy_image;
         private System.Windows.Forms.SaveFileDialog saveDialog_image;
+        private System.Windows.Forms.GroupBox grp_delayed;
+        private System.Windows.Forms.Button btn_delay_cancel;
+        private System.Windows.Forms.TextBox txt_delay;
+        private System.Windows.Forms.Label lab_delay;
+        private System.Windows.Forms.CheckBox chk_delayed_shot;
     }
 }
 

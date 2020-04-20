@@ -1,14 +1,9 @@
 ﻿using GifMotion;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ScreenCap
@@ -18,7 +13,7 @@ namespace ScreenCap
         private frm_select_area frm_select_area_instance;
         private bool current_image_is_gif = false;
         private String tmp_gif_path = Application.StartupPath + "\\tmp.gif";
-
+        private DelayedCaptureJob curr_delayed_capture_job;
 
         public main_form()
         {
@@ -26,8 +21,13 @@ namespace ScreenCap
             frm_select_area_instance = new frm_select_area(this);
         }
 
-        private void btn_screenshot_Click(object sender, EventArgs e)
+        public void btn_screenshot_Click(object sender, EventArgs e)
         {
+            if(chk_delayed_shot.Checked && !(sender is DelayedCaptureJob)){
+                this.start_delayed_job(DelayedCaptureJobType.Shoot);
+                return;
+            }
+
             if (this.rad_capture_screen.Checked)
             {
                 pic_preview.Image = this.take_snapshot_screen();
@@ -134,8 +134,14 @@ namespace ScreenCap
             }
         }
 
-        private void btn_gif_record_Click(object sender, EventArgs e)
+        public void btn_gif_record_Click(object sender, EventArgs e)
         {
+            if (chk_delayed_shot.Checked && !(sender is DelayedCaptureJob))
+            {
+                this.start_delayed_job(DelayedCaptureJobType.Record);
+                return;
+            }
+
             Application.DoEvents();
 
             int x = 0, y = 0, w = 0, h = 0;
@@ -193,12 +199,13 @@ namespace ScreenCap
             this.load_external_image(this.tmp_gif_path);;
 
             // reset form and set gif var
-            if (rad_capture_area.Checked) { 
-                frm_select_area_instance.Show();
+            if (rad_capture_area.Checked) {
+                    frm_select_area_instance.Show();
             }
 
             current_image_is_gif = true;
-            rad_capture_screen.Checked = true;
+                rad_capture_screen.Checked = true;
+            
         }
 
         // copy taken pictures to clipboard (GIF not possible so far, it will only copy one frame)
@@ -272,8 +279,44 @@ namespace ScreenCap
                 pic_preview.Image.Save(saveDialog_image.FileName, new_img_format);
             }
         }
+
+        public void delayed_screenshot_set_form_enabled(bool is_enabled)
+        {
+                this.grp_cap_area.Enabled = is_enabled;
+                this.chk_delayed_shot.Enabled = is_enabled;
+                this.lab_delay.Enabled = is_enabled;
+                this.txt_delay.Enabled = is_enabled;
+                this.btn_delay_cancel.Enabled = !is_enabled;
+                this.btn_screenshot.Enabled = is_enabled;
+                this.grp_gif.Enabled = is_enabled;
+                this.btn_save.Enabled = is_enabled;
+                this.btn_copy_image.Enabled = is_enabled;
+        }
+
+        public void set_btn_delay_cancel_text(String in_string)
+        {
+                this.btn_delay_cancel.Text = in_string;
+        }
+
+        public void do_events()
+        {
+            Application.DoEvents();
+        }
+
+        private void start_delayed_job(DelayedCaptureJobType job_type)
+        {
+            if (this.curr_delayed_capture_job != null)
+            {
+                this.curr_delayed_capture_job.Dispose();
+                this.curr_delayed_capture_job = null;
+            }
+            this.curr_delayed_capture_job = new DelayedCaptureJob(job_type, Int32.Parse(txt_delay.Text), this);
+        }
+
+        private void btn_delay_cancel_Click(object sender, EventArgs e)
+        {
+            this.curr_delayed_capture_job.Dispose();
+            this.curr_delayed_capture_job = null;
+        }
     }
-
-
-
 }
