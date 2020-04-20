@@ -280,6 +280,7 @@ namespace ScreenCap
             }
         }
 
+        // enable/disable form
         public void delayed_screenshot_set_form_enabled(bool is_enabled)
         {
                 this.grp_cap_area.Enabled = is_enabled;
@@ -293,16 +294,19 @@ namespace ScreenCap
                 this.btn_copy_image.Enabled = is_enabled;
         }
 
+        // function to access button text
         public void set_btn_delay_cancel_text(String in_string)
         {
                 this.btn_delay_cancel.Text = in_string;
         }
 
+        // guess what
         public void do_events()
         {
             Application.DoEvents();
         }
 
+        // create and start a timed/delayed screenshot
         private void start_delayed_job(DelayedCaptureJobType job_type)
         {
             if (this.curr_delayed_capture_job != null)

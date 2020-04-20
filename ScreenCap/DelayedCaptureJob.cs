@@ -4,6 +4,7 @@ using System.Windows.Forms;
 
 namespace ScreenCap
 {
+    // Job types
     public enum DelayedCaptureJobType
     {
         Record,
@@ -11,7 +12,7 @@ namespace ScreenCap
         JobDone
     }
 
-
+    // Class to handle times screenshots
     public class DelayedCaptureJob
     {
         public DelayedCaptureJobType my_job_type;
@@ -34,11 +35,13 @@ namespace ScreenCap
             ;
         }
 
+        // enabled/disable form
         private void set_form_enabled(bool is_enabled)
         {
             this.my_form.delayed_screenshot_set_form_enabled(is_enabled);
         }
 
+        // execute the screenshot/recording
         private void do_job()
         {
             switch (this.my_job_type)
@@ -54,6 +57,7 @@ namespace ScreenCap
             }
         }
 
+        // timer tick
         public void tick(object sender, EventArgs e)
         {
             if(this.my_job_type == DelayedCaptureJobType.JobDone)
